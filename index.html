@@ -238,7 +238,7 @@
 
     <!-- Application JavaScript Logic -->
     <script>
-        // 10 Renowned Reciters with robust audio server links
+        // Renowned Reciters with robust audio server links
         const reciters = [
             { id: 'abdulbasit', name: 'الشيخ عبد الباسط عبد الصمد (مرتل)', server: 'https://server7.mp3quran.net/basit/' },
             { id: 'mishary', name: 'الشيخ مشاري راشد العفاسي', server: 'https://server8.mp3quran.net/afs/' },
@@ -249,7 +249,12 @@
             { id: 'ajamy', name: 'الشيخ أحمد العجمي', server: 'https://server10.mp3quran.net/ajm/' },
             { id: 'maher', name: 'الشيخ ماهر المعيقلي', server: 'https://server12.mp3quran.net/maher/' },
             { id: 'hudhaify', name: 'الشيخ علي الحذيفي', server: 'https://server9.mp3quran.net/hthfi/' },
-            { id: 'ghamdi', name: 'الشيخ سعد الغامدي', server: 'https://server7.mp3quran.net/s_gmd/' }
+            { id: 'ghamdi', name: 'الشيخ سعد الغامدي', server: 'https://server7.mp3quran.net/s_gmd/' },
+            { id: 'alemadi', name: 'الشيخ أنس العمادي', server: 'https://server16.mp3quran.net/a_alemadi/Rewayat-Hafs-A-n-Assem/' },
+            { id: 'jazairy', name: 'الشيخ ياسين الجزائري (رواية ورش)', server: 'https://server11.mp3quran.net/qari/' },
+            { id: 'luhaidan', name: 'الشيخ محمد اللحيدان', server: 'https://server8.mp3quran.net/lhdan/' },
+            { id: 'aloosi', name: 'الشيخ عبد الرحمن العوسي', server: 'https://server6.mp3quran.net/aloosi/' },
+            { id: 'suhaim', name: 'الشيخ عبد العزيز سحيم (رواية ورش - بعض السور)', server: 'https://server16.mp3quran.net/a_sheim/Rewayat-Warsh-A-n-Nafi/', surahs: [1,18,31,50,56,67,72,75,112] }
         ];
 
         // All 114 Surahs of the Holy Quran
@@ -273,8 +278,6 @@
             { id: 'rain', name: 'صوت المطر', icon: 'fa-cloud-rain', url: 'https://upload.wikimedia.org/wikipedia/commons/5/55/Garden_rainfall.ogg',
               mp3: 'https://upload.wikimedia.org/transcoded/5/55/Garden_rainfall.ogg/Garden_rainfall.ogg.mp3',
               alt: ['https://upload.wikimedia.org/wikipedia/commons/1/15/Sound_of_light_rainfall.ogg', 'https://upload.wikimedia.org/transcoded/1/15/Sound_of_light_rainfall.ogg/Sound_of_light_rainfall.ogg.mp3'] },
-            { id: 'wind', name: 'صوت الرياح الهادئة', icon: 'fa-wind', url: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Vento_fisterra.ogg',
-              mp3: 'https://upload.wikimedia.org/transcoded/3/38/Vento_fisterra.ogg/Vento_fisterra.ogg.mp3' },
             { id: 'fire', name: 'صوت النار الخافتة', icon: 'fa-fire', url: 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Campfire_sound_ambience.ogg',
               mp3: 'https://upload.wikimedia.org/transcoded/b/b1/Campfire_sound_ambience.ogg/Campfire_sound_ambience.ogg.mp3' },
             { id: 'thunder', name: 'صوت الرعد', icon: 'fa-bolt', url: 'https://upload.wikimedia.org/wikipedia/commons/5/54/Thunder_Claps.ogg',
@@ -356,6 +359,13 @@
             const reciterIndex = document.getElementById('reciterSelect').value;
             const surahNumber = document.getElementById('surahSelect').value;
             const formattedSurah = formatSurahNumber(surahNumber);
+            const reciterObj = reciters[reciterIndex];
+            if (reciterObj.surahs && !reciterObj.surahs.includes(Number(surahNumber))) {
+                showNotification('هذه السورة غير متوفرة بصوت هذا القارئ، اختر سورة أخرى أو قارئاً آخر.');
+                currentQuranAudio.pause();
+                stopQuranPlayUI();
+                return;
+            }
             const audioUrl = `${reciters[reciterIndex].server}${formattedSurah}.mp3`;
 
             if (currentQuranAudio.src !== audioUrl) {
